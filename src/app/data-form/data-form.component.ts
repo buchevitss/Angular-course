@@ -26,7 +26,7 @@ export class DataFormComponent implements OnInit {
   ngOnInit(): void {
 
     // this.estados = this.dropDownService.getEstadosBr();
-
+TESTEEEEEEEEEEEEEEEKERELHOOOOO 
     this.dropDownService.getEstadosBr().
     subscribe(dados => {this.estados = dados; console.log(dados, this.estados, 'ENTROU NO SUBSCRIBE')})
     
