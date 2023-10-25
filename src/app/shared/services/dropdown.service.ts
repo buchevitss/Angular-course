@@ -15,4 +15,13 @@ export class DropdownService {
     // return this.http.get('assets/dados/estadosbr.json').pipe(
     // map((res: any) =>  res.json())); 
   }
+
+  getCargos(){
+    return [
+      {nome: 'Dev', nivel:'Jr', desc:'Dev Jr'},
+      {nome: 'Dev', nivel:'Pleno', desc:'Dev Pleno'},
+      {nome: 'Dev', nivel:'Senior', desc:'Dev Sr'}
+
+    ]
+  }
 }

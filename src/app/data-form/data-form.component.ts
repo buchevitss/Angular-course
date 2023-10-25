@@ -17,6 +17,7 @@ export class DataFormComponent implements OnInit {
   formulario: FormGroup = new FormGroup({});
   estados: EstadoBr[] = [];
   cidades: string[] = [''];
+  cargos: any[] = [''];
 
   constructor(private formBuilder: FormBuilder,
     private http: HttpClient, 
@@ -30,6 +31,7 @@ export class DataFormComponent implements OnInit {
     this.dropDownService.getEstadosBr().
     subscribe(dados => {this.estados = dados; console.log(dados, this.estados, 'ENTROU NO SUBSCRIBE')})
     
+    this.cargos = this.dropDownService.getCargos();
 
     this.formulario = this.formBuilder.group({
       nome: [null, [Validators.required,  Validators.minLength(3)]],
@@ -42,7 +44,8 @@ export class DataFormComponent implements OnInit {
         bairro:[null, Validators.required],
         cidade:[null, Validators.required],
         estado:[null, Validators.required],
-      })
+      }), 
+      cargo: [null]
 
     })
 
@@ -108,6 +111,15 @@ export class DataFormComponent implements OnInit {
     })
   }
 
+  setarCargo(){
+    const cargo = {nome: 'Dev', nivel:'Pleno', desc:'Dev Pleno'}
+    this.formulario.get('cargo')?.setValue(cargo);
+  }
+
+  compararCargos(obj1: any, obj2: any){
+    return obj1 && obj2 ? (obj1.nome === obj2.nome) : obj1 === obj2;
+
+  }
   verificaValidTouched(campo: any){
     return this.formulario.get(campo)?.valid && this.formulario.get(campo)?.touched
   }
