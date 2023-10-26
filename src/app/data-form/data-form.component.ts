@@ -18,6 +18,8 @@ export class DataFormComponent implements OnInit {
   estados: EstadoBr[] = [];
   cidades: string[] = [''];
   cargos: any[] = [''];
+  tecnologias: any[] = [''];
+  newsletterOp: any [] = [''];
 
   constructor(private formBuilder: FormBuilder,
     private http: HttpClient, 
@@ -32,6 +34,8 @@ export class DataFormComponent implements OnInit {
     subscribe(dados => {this.estados = dados; console.log(dados, this.estados, 'ENTROU NO SUBSCRIBE')})
     
     this.cargos = this.dropDownService.getCargos();
+    this.tecnologias = this.dropDownService.getTecnologias();
+    this.newsletterOp = this.dropDownService.getNewsletter();
 
     this.formulario = this.formBuilder.group({
       nome: [null, [Validators.required,  Validators.minLength(3)]],
@@ -45,8 +49,9 @@ export class DataFormComponent implements OnInit {
         cidade:[null, Validators.required],
         estado:[null, Validators.required],
       }), 
-      cargo: [null]
-
+      cargo: [null],
+      tecnologias: [null],
+      newsletter:['s']
     })
 
     this.formulario.get('endereco.cep')?.statusChanges.pipe(
