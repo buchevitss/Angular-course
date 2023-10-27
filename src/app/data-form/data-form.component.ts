@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { DropdownService } from '../shared/services/dropdown.service';
 import { EstadoBr } from '../shared/models/estado-br';
@@ -20,6 +20,7 @@ export class DataFormComponent implements OnInit {
   cargos: any[] = [''];
   tecnologias: any[] = [''];
   newsletterOp: any [] = [''];
+  frameworks = ['angular', 'react', 'js'];
 
   constructor(private formBuilder: FormBuilder,
     private http: HttpClient, 
@@ -51,7 +52,10 @@ export class DataFormComponent implements OnInit {
       }), 
       cargo: [null],
       tecnologias: [null],
-      newsletter:['s']
+      newsletter:['s'],
+      termos:[null, Validators.pattern('true')],
+      frameworks: [this.buildFrameworks()]
+     
     })
 
     this.formulario.get('endereco.cep')?.statusChanges.pipe(
@@ -63,6 +67,10 @@ export class DataFormComponent implements OnInit {
   )
   .subscribe(dados => dados ? this.populaDadosForm(dados) : {});
     
+  }
+
+  getFrameworksControls(){
+    return null;
   }
 
   onSubimit(){
@@ -79,6 +87,16 @@ export class DataFormComponent implements OnInit {
     }
   }
 
+  buildFrameworks(){
+    const values = this.frameworks.map(v => new FormControl(false));
+    
+    // return this.formBuilder.array(values);
+    return [
+      new FormControl(false),
+      new FormControl(false),
+      new FormControl(false)
+    ]
+  }
   consultaCEP(){
     let cep = this.formulario.get('endereco.cep')?.value;
     if( cep != null && cep !== '') {
