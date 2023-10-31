@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { DropdownService } from '../shared/services/dropdown.service';
 import { EstadoBr } from '../shared/models/estado-br';
 import { ConsultaCepService } from '../shared/services/consulta-cep.service';
 import { distinctUntilChanged } from 'rxjs-compat/operator/distinctUntilChanged';
 import { empty, Observable, switchMap, tap } from 'rxjs';
+import { FormValidations } from '../shared/services/form-validation';
 
 @Component({
   selector: 'app-data-form',
@@ -41,8 +42,9 @@ export class DataFormComponent implements OnInit {
     this.formulario = this.formBuilder.group({
       nome: [null, [Validators.required,  Validators.minLength(3)]],
       email: [null,[Validators.required, Validators.email]],
+      confirmaEmail: [null,[Validators.required, Validators.email]],
       endereco: this.formBuilder.group({
-        cep: [null, Validators.required],
+        cep: [null, [Validators.required, FormValidations.cepValidator]],
         numero:[null, Validators.required],
         complemento:[],
         rua:[null, Validators.required],
@@ -54,7 +56,7 @@ export class DataFormComponent implements OnInit {
       tecnologias: [null],
       newsletter:['s'],
       termos:[null, Validators.pattern('true')],
-      frameworks: [this.buildFrameworks()]
+      frameworks: this.buildFrameworks()
      
     })
 
@@ -70,9 +72,10 @@ export class DataFormComponent implements OnInit {
   }
 
   getFrameworksControls(){
-    return null;
+    return this.frameworks;
   }
 
+  
   onSubimit(){
     if(this.formulario.valid){
       console.log(this.formulario.value);
@@ -89,14 +92,11 @@ export class DataFormComponent implements OnInit {
 
   buildFrameworks(){
     const values = this.frameworks.map(v => new FormControl(false));
-    
-    // return this.formBuilder.array(values);
-    return [
-      new FormControl(false),
-      new FormControl(false),
-      new FormControl(false)
-    ]
+    console.log(values)
+    return this.formBuilder.array(values);
   }
+
+
   consultaCEP(){
     let cep = this.formulario.get('endereco.cep')?.value;
     if( cep != null && cep !== '') {
