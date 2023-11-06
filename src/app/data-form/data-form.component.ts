@@ -5,8 +5,9 @@ import { DropdownService } from '../shared/services/dropdown.service';
 import { EstadoBr } from '../shared/models/estado-br';
 import { ConsultaCepService } from '../shared/services/consulta-cep.service';
 import { distinctUntilChanged } from 'rxjs-compat/operator/distinctUntilChanged';
-import { empty, Observable, switchMap, tap } from 'rxjs';
+import { empty, Observable, switchMap, tap, map } from 'rxjs';
 import { FormValidations } from '../shared/services/form-validation';
+import { VerificaEmailService } from './services/verifica-email.service';
 
 @Component({
   selector: 'app-data-form',
@@ -26,11 +27,14 @@ export class DataFormComponent implements OnInit {
   constructor(private formBuilder: FormBuilder,
     private http: HttpClient, 
     private dropDownService: DropdownService,
-    private consultaCepService: ConsultaCepService) { }
+    private consultaCepService: ConsultaCepService,
+    private verificaEmailService: VerificaEmailService) { }
 
   ngOnInit(): void {
 
     // this.estados = this.dropDownService.getEstadosBr();
+
+    // this.verificaEmailService.verificarEmail('email@email.com').subscribe();
 
     this.dropDownService.getEstadosBr().
     subscribe(dados => {this.estados = dados; console.log(dados, this.estados, 'ENTROU NO SUBSCRIBE')})
@@ -41,10 +45,10 @@ export class DataFormComponent implements OnInit {
 
     this.formulario = this.formBuilder.group({
       nome: [null, [Validators.required,  Validators.minLength(3)]],
-      email: [null,[Validators.required, Validators.email]],
-      confirmaEmail: [null,[Validators.required, Validators.email]],
+      email: [null,[Validators.required, Validators.email], this.validarEmail.bind(this)],
+      confirmarEmail: [null,[FormValidations.equalsTo('email')]],
       endereco: this.formBuilder.group({
-        cep: [null, [Validators.required, FormValidations.cepValidator]],
+        cep: [null, [Validators.required, FormValidations.cepValidator]], 
         numero:[null, Validators.required],
         complemento:[],
         rua:[null, Validators.required],
@@ -142,6 +146,12 @@ export class DataFormComponent implements OnInit {
   compararCargos(obj1: any, obj2: any){
     return obj1 && obj2 ? (obj1.nome === obj2.nome) : obj1 === obj2;
 
+  }
+
+  validarEmail(formControl: FormControl){
+    return this.verificaEmailService.verificarEmail(formControl.value).pipe(
+      map(emailExiste => emailExiste ? {emailInvalido: true } : null))
+    
   }
   verificaValidTouched(campo: any){
     return this.formulario.get(campo)?.valid && this.formulario.get(campo)?.touched
