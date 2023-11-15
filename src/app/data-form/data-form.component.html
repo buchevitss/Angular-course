@@ -1,6 +1,6 @@
 <form class="form-horizontal" [formGroup]="formulario" (ngSubmit)="onSubimit()">
 
-  <div class="form-group" [ngClass]="aplicaCssErro('nome')">
+  <!-- <div class="form-group" [ngClass]="aplicaCssErro('nome')">
     <div class="col-sm-12">
       <label for="nome" class="control-label">nome</label>
       <app-error-mgs [control]="formulario.get('nome')" label="nome"></app-error-mgs>
@@ -8,7 +8,14 @@
     <div class="col-sm-12">
       <input type="nome" class="form-control" formControlName="nome" id="nome" placeholder="nana">
     </div>
-  </div>
+  </div> -->
+
+  <app-input-field 
+  formControlName="nome"
+  [classeCss]="aplicaCssErro('nome')"
+  id="nome" label="nome" [control]="formulario.get('nome')">
+
+  </app-input-field>
 
    
     <div class="form-group" [ngClass]="aplicaCssErro('email')">

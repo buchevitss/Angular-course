@@ -1,0 +1,11 @@
+
+  <div class="form-group" [ngClass]="classeCss('label')">
+    <div class="col-sm-12">
+      <label [attr.for]="id" class="control-label">{{ label }}</label>
+      <app-error-mgs [control]="control" [label]="label"></app-error-mgs>
+    </div>
+    <div class="col-sm-12">
+      <input [type]="type" class="form-control" [id]="id" [readonly]="!!isReadOnly"
+      [(ngModel)]="value">
+    </div>
+  </div>  

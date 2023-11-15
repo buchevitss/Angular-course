@@ -8,15 +8,19 @@ import { distinctUntilChanged } from 'rxjs-compat/operator/distinctUntilChanged'
 import { empty, Observable, switchMap, tap, map } from 'rxjs';
 import { FormValidations } from '../shared/services/form-validation';
 import { VerificaEmailService } from './services/verifica-email.service';
+import { BaseFormComponent } from '../shared/base-form/base-form.component';
 
 @Component({
   selector: 'app-data-form',
   templateUrl: './data-form.component.html',
   styleUrls: ['./data-form.component.scss']
 })
-export class DataFormComponent implements OnInit {
+export class DataFormComponent extends BaseFormComponent {
+  submit() {
+    throw new Error('Method not implemented.');
+  }
 
-  formulario: FormGroup = new FormGroup({});
+  // formulario: FormGroup = new FormGroup({});
   estados: EstadoBr[] = [];
   cidades: string[] = [''];
   cargos: any[] = [''];
@@ -28,7 +32,9 @@ export class DataFormComponent implements OnInit {
     private http: HttpClient, 
     private dropDownService: DropdownService,
     private consultaCepService: ConsultaCepService,
-    private verificaEmailService: VerificaEmailService) { }
+    private verificaEmailService: VerificaEmailService) {
+    super();
+  }
 
   ngOnInit(): void {
 
